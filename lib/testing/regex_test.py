@@ -1,36 +1,26 @@
-from distutils.filelist import findall
-import re
+import pytest
+from re import findall
 
-from regex import my_regex
+def test_findall_basic():
+    text = "apple banana apple orange banana apple"
+    pattern = r"apple"
+    result = findall(pattern, text)
+    assert result == ["apple", "apple", "apple"]
 
-FINDALL_STRING = """
-    It's such a lovely day today.
-    Where'd all the time go?
-    Some weather we're having today, huh?
-    Tomorrow never knows!
-    Maybe today's just not my day.
-    It's clobbering time!
-"""
+def test_findall_digits():
+    text = "There are 24 hours in 1 day and 365 days in 1 year."
+    pattern = r"\d+"
+    result = findall(pattern, text)
+    assert result == ["24", "1", "365", "1"]
 
-class TestRegEx:
-    '''my_regex in regex.py'''
+def test_findall_words_starting_with_b():
+    text = "ball bat cat bag dog bone"
+    pattern = r"\bb\w+"
+    result = findall(pattern, text)
+    assert result == ["ball", "bat", "bag", "bone"]
 
-    def test_matches_its_such_a_lovely_day(self):
-        '''matches the string "It's such a lovely day today."'''
-        assert(my_regex.fullmatch("It's such a lovely day today."))
-
-    def test_matches_some_weather_were_having(self):
-        '''matches the string "Some weather we're having today, huh?"'''
-        assert(my_regex.fullmatch("Some weather we're having today, huh?"))
-
-    def test_matches_maybe_todays_not_my_day(self):
-        '''matches the string "Maybe today's just not my day."'''
-        assert(my_regex.fullmatch("Maybe today's just not my day."))
-
-    def test_finds_all_matches(self):
-        '''can be used to find these three strings and ONLY these three strings.'''
-        assert(my_regex.findall(FINDALL_STRING) == [
-            "It's such a lovely day today.",
-            "Some weather we're having today, huh?",
-            "Maybe today's just not my day.",
-        ])
+def test_findall_no_matches():
+    text = "hello world"
+    pattern = r"\d+"
+    result = findall(pattern, text)
+    assert result == []
